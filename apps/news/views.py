@@ -11,6 +11,7 @@ from urlparse import urlparse
 import json
 import requests
 import webhoseio
+
 # Create your views here.
 def index(request):
 	
@@ -34,25 +35,25 @@ def getTwitterData(request):
 	api = tweepy.API(auth)
 	trends = api.trends_available()
 
-	for t in range(0,len(trends)):
-	
-		localeToCheck = trends[t].name
+	# for t in range(0,len(trends)):
+
+	# 	localeToCheck = trends[t].name
+
+	# 	# check to see if the local exists if id toes 
+	# 	locale_id = 0 # this will be whatever id it is
 		
-		# check to see if the local exists if id toes 
-		locale_id = 0 # this will be whatever id it is
-			
-		else: 
-			#insert in the locales via the api and update locale_id to be last insert id
-			locale_id = 1 
+	# 	else:
+	# 		#insert in the locales via the api and update locale_id to be last insert id
+	# 		locale_id = 1 
 
-	webHoseCount = getWebHoseData(localeToCheck)
-	redditCount = get_reddit(localeToCheck)
+	# webHoseCount = getWebHoseData(localeToCheck)
+	# redditCount = get_reddit(localeToCheck)
 
-	totalCount = webHoseCount + redditCount 
+	# totalCount = webHoseCount + redditCount 
 
-	#insert into entries via the api
+	# #insert into entries via the api
 
-	return JsonResponse('success':'true','response':trends)
+	# return JsonResponse('success':'true','response':trends)
 
 
 def getWebHoseData(location):
@@ -78,7 +79,7 @@ def get_reddit(loc):
     for submission in submissions:
         count += 1
         print submission.title
-     return count
+	return count
 
 def geoCodePlace(request):
 	address = "1600 Amphitheatre Parkway, Mountain View, CA"

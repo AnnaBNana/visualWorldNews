@@ -3,6 +3,6 @@ import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'getData$', views.getData),
+    # url(r'getData$', views.getData),
     url(r'getGeoCode$', views.geoCodePlace),
 ]
