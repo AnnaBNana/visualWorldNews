@@ -3,6 +3,8 @@ import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'getData$', views.getData),
+    url(r'getTwitter$',views.getTwitterData),
+    # url(r'getData$', views.getData),
     url(r'getGeoCode$', views.geoCodePlace),
+    url(r'frontEndData$', views.frontEndData),
 ]
