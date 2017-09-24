@@ -15,6 +15,9 @@ import httplib
 import praw
 from django.utils.dateparse import parse_datetime
 import datetime
+import nexosisapi
+import dateutil.parser as date_parser
+
 
 SECRET = os.environ['REDDIT_SECRET']
 REDDIT_ID = os.environ['REDDIT_ID']
@@ -126,6 +129,9 @@ def getTwitterData(request):
 
 					
 			createdEntry = json.loads(entryResponse.text)
+			print("CREATED ENTRY RESPONSE ***")
+			print(createdEntry)
+			createdEntryObjectId = createdEntry['objectId']
 		except Exception as c:
 			print(c)
 
@@ -157,7 +163,7 @@ def getTwitterData(request):
 
 			average = total / resultsLength
 			#update the average for that locale
-			url4 = "https://parseapi.back4app.com/classes/locale/"+locale_id+""
+			url4 = "https://parseapi.back4app.com/classes/entries/"+createdEntryObjectId+""
 
 			payload = "average="+str(average)+""
 			headers4 = {
@@ -224,11 +230,36 @@ def geoCodePlace(location):
 	    
 	return {'lat':latitude,'long':longitude}
 
+def forecast(request):
+	url = "https://parseapi.back4app.com/classes/entries"
+
+	headers = {
+	    'x-parse-application-id': "Ag24rU7mUcXfZhBZYnDa9Q2RbWPSF4hsZWBVCW61",
+	    'x-parse-rest-api-key': "jbAkwQhfcchKlUL37pwbvVwYiTmLmJlV4QEgiLsP",
+	    'cache-control': "no-cache",
+	    'postman-token': "a1a7a003-bc60-f717-43b4-43a1de03150a"
+	    }
+
+	response = requests.request("GET", url, headers=headers)
+
+	# print(response.text)
+	client = nexosisapi.Client('key2155ea7ca6af4e289a4e30f6d156dda4')
+	jsonObject = json.loads(response.text)
+	print(jsonObject)
+	# client.datasets.create('news', jsonObject['results'])
+
+
+	# datasets = client.datasets.list()
+	# print(datasets)
+
+	return JsonResponse({'success':'true','response':jsonObject['results']})
+
+
 def frontEndData(request):
 	print(datetime.datetime.now())
 	now = datetime.datetime.now()
 	nowString = str(now)
-	fiveMinutesAgo = now - datetime.timedelta(hours=24)
+	fiveMinutesAgo = now - datetime.timedelta(minutes=60)
 	print("***fiveminutesago")
 	print(fiveMinutesAgo)
 
@@ -246,26 +277,15 @@ def frontEndData(request):
 	# print(existingEntries)
 	jsonObject = json.loads(existingEntries.text)
 	# print(jsonObject['results'])
-	# print("****main results")
+	print("****main results")
+
 	mainResults = jsonObject['results']
+	print(mainResults)
 	newResults = []
 	# print(len(mainResults))
 	resultLength = len(mainResults)
 	for x in range(1,len(mainResults)):
 		# print("RESULT LOOP")
-		
-		url3 = "https://parseapi.back4app.com/classes/locale"
-
-		querystring3 = 'where={"objectId":"'+mainResults[x]['locale_id']+'"}'
-
-		headers = {
-		    'x-parse-application-id': "Ag24rU7mUcXfZhBZYnDa9Q2RbWPSF4hsZWBVCW61",
-		    'x-parse-rest-api-key': "jbAkwQhfcchKlUL37pwbvVwYiTmLmJlV4QEgiLsP",
-		    'cache-control': "no-cache",
-		    'postman-token': "e3b38770-f50a-58af-5164-f85ac4d804b3"
-		}
-
-		existingEntries = requests.request("GET", url3, headers=headers, params=querystring3)
 
 		# print("***EXISTING ENTRIES***")
 		# print(json.loads(existingEntries.text))
@@ -276,8 +296,10 @@ def frontEndData(request):
 		# print("RESULT RESULT")
 	
 		# print("END RESULT")
-		mainResults[x]['average'] = jsonExistingobject['results'][0]['average']
-		newResults.append([mainResults[x]['lat'],mainResults[x]['long'],mainResults[x]['average'],mainResults[x]['count']])
+		try:
+			newResults.append([mainResults[x]['lat'],mainResults[x]['long'],mainResults[x]['average'],mainResults[x]['count']])
+		except Exception as e:
+			print(e)
 		# look up that locale id and average
 		# insert the average into that object
 
