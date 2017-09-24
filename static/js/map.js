@@ -116,8 +116,12 @@
     // materialize modal trigger
     $('.modal').modal({dismissible: true});
     // collect form data and make ajax call
-    $(".sub").click(function(){
-        
-    })
+
+    $(document).ready(function () {
+        $.get('/frontEndData', function (res) {
+            console.log(res)
+        });
+    });
 
 })();
+

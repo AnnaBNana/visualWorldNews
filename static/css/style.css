@@ -43,3 +43,6 @@ svg {
 .btn-flat {
     margin-right: 20px;
 }
+.pac-container {
+    z-index: 2010 !important;
+}
