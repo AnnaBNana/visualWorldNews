@@ -11,9 +11,6 @@ from urlparse import urlparse
 import json
 import requests
 import webhoseio
-<<<<<<< HEAD
-
-=======
 import httplib
 import praw
 from django.utils.dateparse import parse_datetime
@@ -21,7 +18,6 @@ import datetime
 
 SECRET = os.environ['REDDIT_SECRET']
 REDDIT_ID = os.environ['REDDIT_ID']
->>>>>>> 1aaff612dcb786a1d67d763a654c279e9c5ea226
 # Create your views here.
 def index(request):
 	
@@ -44,28 +40,6 @@ def getTwitterData(request):
 
 	api = tweepy.API(auth)
 	trends = api.trends_available()
-
-<<<<<<< HEAD
-	# for t in range(0,len(trends)):
-
-	# 	localeToCheck = trends[t].name
-
-	# 	# check to see if the local exists if id toes 
-	# 	locale_id = 0 # this will be whatever id it is
-		
-	# 	else:
-	# 		#insert in the locales via the api and update locale_id to be last insert id
-	# 		locale_id = 1 
-
-	# webHoseCount = getWebHoseData(localeToCheck)
-	# redditCount = get_reddit(localeToCheck)
-
-	# totalCount = webHoseCount + redditCount 
-
-	# #insert into entries via the api
-
-	# return JsonResponse('success':'true','response':trends)
-=======
 	
 	for t in range(1,len(trends)):
 		try:
@@ -209,7 +183,6 @@ def getTwitterData(request):
 		# once we have created the entry now we go back and get an average
 	#insert into entries via the api
 	return JsonResponse({'success':'true','total_count':totalCount})
->>>>>>> 1aaff612dcb786a1d67d763a654c279e9c5ea226
 
 
 def getWebHoseData(location):
@@ -227,20 +200,6 @@ def getWebHoseData(location):
   	# return JsonResponse({'success':'true','twitter_response':trends[2]})
 
 def get_reddit(loc):
-<<<<<<< HEAD
-    reddit = praw.Reddit(client_id=REDDIT_ID,
-                     client_secret=SECRET,
-                     user_agent='web:visualWorldNews:v0.0.1 (by /u/anna_b_nana)')
-    submissions = reddit.subreddit(loc).hot()
-    count = 0
-    for submission in submissions:
-        count += 1
-        print submission.title
-	return count
-
-def geoCodePlace(request):
-	address = "1600 Amphitheatre Parkway, Mountain View, CA"
-=======
 	reddit = praw.Reddit(client_id=REDDIT_ID, client_secret=SECRET, user_agent='web:visualWorldNews:v0.0.1 (by /u/anna_b_nana)')
 	submissions = reddit.subreddit(loc).hot()
 	count = 0
@@ -255,7 +214,6 @@ def geoCodePlace(request):
 
 def geoCodePlace(location):
 	address = location
->>>>>>> 1aaff612dcb786a1d67d763a654c279e9c5ea226
 	api_key = "AIzaSyDNiwIGMuu9c6arwtK2Th11L2hm4mmXtGM"
 	api_response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}'.format(address, api_key))
 	api_response_dict = api_response.json()
