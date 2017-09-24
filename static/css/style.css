@@ -46,3 +46,8 @@ svg {
 .pac-container {
     z-index: 2010 !important;
 }
+.preloader-wrapper {
+    position: absolute;
+    bottom: 400px;
+    left: 500px;
+}

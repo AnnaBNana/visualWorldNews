@@ -17,6 +17,8 @@ from django.utils.dateparse import parse_datetime
 import datetime
 import nexosisapi
 import dateutil.parser as date_parser
+import simplejson
+from telesign.messaging import MessagingClient
 
 
 SECRET = os.environ['REDDIT_SECRET']
@@ -297,7 +299,7 @@ def frontEndData(request):
 	
 		# print("END RESULT")
 		try:
-			newResults.append([mainResults[x]['lat'],mainResults[x]['long'],mainResults[x]['average'],mainResults[x]['count']])
+			newResults.append([mainResults[x]['long'],mainResults[x]['lat'],mainResults[x]['average'],mainResults[x]['count']])
 		except Exception as e:
 			print(e)
 		# look up that locale id and average
@@ -310,4 +312,19 @@ def frontEndData(request):
 
 def textAlert(request):
 	confirmation = {"message": "Success"}
+	print request.POST['phone_number']
+	customer_id = "A2BBC2E2-9E5E-42AC-AA47-83F3F71E32B0"
+	# api_key = os.environ['TELESIGN_KEY']
+	api_key = "bgjWBxe+1UYKxjED0/Bk1m71u2tLwGrKJOu5+N+ZnvRuw+dsvjTy7PkjXjQlIcKIpAB7j1gRW8a1C5YRFhwXpw=="
+
+	print(customer_id, api_key)
+
+	phone_number = request.POST['phone_number']
+	message = "You are signed up for alerts about " + request.POST['location']
+	message_type = "ARN"
+
+	messaging_client = MessagingClient(customer_id, api_key)
+	response = messaging_client.message(phone_number, message, message_type)
+
+	print(response.json)
 	return JsonResponse(confirmation)
