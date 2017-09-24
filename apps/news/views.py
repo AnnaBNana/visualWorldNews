@@ -353,3 +353,7 @@ def frontEndData(request):
 	#select all from entries where count is greater than 75 for the latest date
 	#loop through object
 	#if the location average
+
+def textAlert(request):
+	confirmation = {"message": "Success"}
+	return JsonResponse(confirmation)

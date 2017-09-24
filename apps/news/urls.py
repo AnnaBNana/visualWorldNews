@@ -8,5 +8,6 @@ urlpatterns = [
     # url(r'getData$', views.getData),
     url(r'getGeoCode$', views.geoCodePlace),
     url(r'frontEndData$', views.frontEndData),
+    url(r'^textAlert$', views.textAlert),
     url(r'forecast$', views.forecast),
 ]
