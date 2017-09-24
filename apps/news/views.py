@@ -244,12 +244,58 @@ def forecast(request):
 
 	response = requests.request("GET", url, headers=headers)
 
-	# print(response.text)
-	client = nexosisapi.Client('key2155ea7ca6af4e289a4e30f6d156dda4')
+	print(response.text)
+	# client = nexosisapi.Client('key2155ea7ca6af4e289a4e30f6d156dda4')
 	jsonObject = json.loads(response.text)
-	print(jsonObject)
+	jsonTuple= tuple(jsonObject['results'])
+	print(jsonObject['results'])
+
+	requestBody = {
+	  "columns": {
+	    "timestamp": {
+	      "dataType": "date",
+	      "role": "timestamp"
+	    },
+	    "sales": {
+	      "dataType": "numeric",
+	      "role": "none"
+	    }
+	  },
+	  "data": [{
+	      "timestamp": "2013-01-01T00:00:00Z",
+	      "sales": "1500.56",
+	      "transactions": "195.0"
+	    },
+	    {
+	      "timestamp": "2013-01-02T00:00:00Z",
+	      "sales": "4078.52",
+	      "transactions": "696.0"
+	    }]
+	}
+
+	jsonToSend = json.dumps(requestBody)
+
 	# client.datasets.create('news', jsonObject['results'])
 
+	headers = {
+	    # Request headers
+	    'Content-Type': 'application/json',
+	    'api-key': '2155ea7ca6af4e289a4e30f6d156dda4',
+	}
+
+	params = urllib.urlencode({
+	})
+
+	try:
+	    conn = httplib.HTTPSConnection('ml.nexosis.com')
+	    conn.request("PUT", "/v1/data/news?%s" % params, "{jsonToSend}", headers)
+	    response = conn.getresponse()
+	    data = response.read()
+	    print(data)
+	    conn.close()
+	except Exception as e:
+	    # print("[Errno {0}] {1}".format(e.errno, e.strerror))
+	    print(e)
 
 	# datasets = client.datasets.list()
 	# print(datasets)
