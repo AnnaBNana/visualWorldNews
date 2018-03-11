@@ -25,6 +25,9 @@
     </nav>
     <div id="map">
     </div>
+    <div class="success-msg z-depth-2">
+        <p class="right-align"><i class="material-icons clear-icon">clear</i></p>
+    </div>
     <div id="modal1" class="modal">
         <div class="modal-content">
             <h4>Sign Up for Text Alerts</h4>
@@ -48,7 +51,7 @@
                         <div class="input-field col s12">
                             <i class="material-icons prefix">language</i>
                             <input id="searchTextField" type="text" class="validate form-control" autocomplete="on" runat="server" name="location" required>
-                            <label for="searchTextField">Target Location</label>
+                            {% comment %} <label for="searchTextField">Target Location</label> {% endcomment %}
                         </div>
                     </div>
                 </form>
@@ -111,15 +114,28 @@
     <script src="{% static 'js/map.js' %}"></script>
     <script src="{% static 'js/places.js' %}"></script>
     <script>
+        var width = $(window).width()
     $(".sub").click(function () {
-        console.log()
+        console.log($("#searchTextField").val())
             var data = { "name": $("#name").val(), "phone_number": $("#phone_number").val(), "location": $("#searchTextField").val(), "csrfmiddlewaretoken": '{{ csrf_token }}'};
             console.log(data)
             $.post("/textAlert", data, function (d) {
-                console.log(d)
+                console.log(d);
+                if (d.message) {
+                    $("#modal1").css("visibility", "hidden")
+                }
+                $('.success-msg').append("<p>You are now signed up for text alerts for " + $("#searchTextField").val() + ". You will receive a text message shortly.</p>").css({"display": "block", "left": (width/2) - 250 + "px"});
+                $('.clear-icon').click(function(){
+                    $('.success-msg').css("display", "none")
+                    $('.modal-overlay').css("display", "none");
+                })
+                
             })
         })
     </script>
+        {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNiwIGMuu9c6arwtK2Th11L2hm4mmXtGM&callback=initMap">
+
+        </script> {% endcomment %}
 </body>
 
 </html>

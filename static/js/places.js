@@ -9,6 +9,8 @@ $(document).ready(function () {
 
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var place = autocomplete.getPlace();
+            console.log(place)
+            $('#searchTextField').attr("data-lat", place.geometry.location.lat()).attr("data-long", place.geometry.location.lng())
             var formattedAddress = place.formatted_address;
             var individualAddressComponents = formattedAddress.split(',');
             var stateString = individualAddressComponents[2];

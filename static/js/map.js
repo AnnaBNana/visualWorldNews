@@ -4,6 +4,8 @@
         width = document.body.clientWidth,
         coords = [],
         api_key = "AIzaSyDNiwIGMuu9c6arwtK2Th11L2hm4mmXtGM";
+    $(".preloader-wrapper").css("left", (width / 2) - $(".preloader-wrapper").width() + "px");
+    $(".preloader-wrapper").css("bottom", (height / 2) + $(".preloader-wrapper").height() + "px");
     // set svg canvas
     var svg = d3.select("#map")
         .append("svg")
@@ -101,24 +103,59 @@
                     coords.push(d[1], d[0])
 
                 })
+                .on("mouseover", function (d) {
+                    // d[0] d[1]
+                    // var geocoder = new google.maps.Geocoder;
+                    // function geocodeLatLng(geocoder, map, infowindow) {
+                    //     var input = document.getElementById('latlng').value;
+                    //     var latlngStr = input.split(',', 2);
+                    //     var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
+                    //     geocoder.geocode({ 'location': latlng }, function (results, status) {
+                    //         if (status === 'OK') {
+                    //             if (results[0]) {
+                    //                 map.setZoom(11);
+                    //                 var marker = new google.maps.Marker({
+                    //                     position: latlng,
+                    //                     map: map
+                    //                 });
+                    //                 infowindow.setContent(results[0].formatted_address);
+                    //                 infowindow.open(map, marker);
+                    //             } else {
+                    //                 window.alert('No results found');
+                    //             }
+                    //         } else {
+                    //             window.alert('Geocoder failed due to: ' + status);
+                    //         }
+                    //     });
+                    // }
+                    tooltip.attr("class", "active-tip")
+                        .html("<p class='tooltip-text'>number of hits:" + d[3] + "</p>");
+                    d3.select(".active-tip")
+                        .style("top", d3.event.pageY + "px")
+                        .style("left", d3.event.pageX + "px")
+                })
+                // dismiss on mouse-out
+                .on("mouseout", function (d) {
+                    tooltip.attr("class", "inactive");
+                });
             $('.preloader-wrapper').removeClass("active").addClass("inactive");
                     // timer for marker pulse
-            setInterval(function(){
-                svg.selectAll("circle")
-                    .transition()
-                    .duration(500)
-                    .attr('r', function (d) {
-                        return parseInt(d[2])/7
-                    })
-                    .on("end", function (d) {
-                        svg.selectAll("circle")
-                            .transition()
-                            .duration(500)
-                            .attr('r', function (d) {
-                                return 2
-                            })
-                    })
-            }, 1000)
+            // setInterval(function(){
+            //     svg.selectAll("circle")
+            //         .transition()
+            //         .duration(2000)
+            //         .attr('r', function (d) {
+            //             return parseInt(d[2])/7
+            //         })
+            //         .on("end", function (d) {
+            //             svg.selectAll("circle")
+            //                 .transition()
+            //                 .duration(2000)
+            //                 .attr('r', function (d) {
+            //                     return 2
+            //                 })
+            //         })
+            // }, 2000)
             // d3.select("svg").on("mousedown.log", function () {
             //     console.log(projection.invert(d3.mouse(this)));
             // });

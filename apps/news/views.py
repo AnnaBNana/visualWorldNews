@@ -25,7 +25,6 @@ SECRET = os.environ['REDDIT_SECRET']
 REDDIT_ID = os.environ['REDDIT_ID']
 # Create your views here.
 def index(request):
-	
 	return render(request, 'news/index.html')
 
 def getTwitterData(request):
@@ -190,7 +189,7 @@ def getTwitterData(request):
 
 		# once we have created the entry now we go back and get an average
 	#insert into entries via the api
-	return JsonResponse({'success':'true','total_count':totalCount})
+	return JsonResponse({'success':'true','total_count':average})
 
 
 def getWebHoseData(location):
@@ -307,7 +306,7 @@ def frontEndData(request):
 	print(datetime.datetime.now())
 	now = datetime.datetime.now()
 	nowString = str(now)
-	fiveMinutesAgo = now - datetime.timedelta(minutes=60)
+	fiveMinutesAgo = now - datetime.timedelta(minutes=120)
 	print("***fiveminutesago")
 	print(fiveMinutesAgo)
 
